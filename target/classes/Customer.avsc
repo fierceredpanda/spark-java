@@ -1,0 +1,23 @@
+{
+    "type": "record",
+    "name": "Customer",
+    "doc": "A customer record.",
+    "fields": [
+        {"name": "fristName", "type": "string"},
+        {"name": "lastName", "type": "string"},
+        {"name": "age", "type": "int"},
+        {
+            "name": "address",
+            "type": {
+                "type": "record",
+                "name": "AddressRecord",
+                "fields": [
+                    {"name": "street", "type": "string"},
+                    {"name": "city", "type": "string"},
+                    {"name": "state", "type": "string"},
+                    {"name": "zip", "type": "string"}
+                ]
+            }
+        }
+    ]
+}
