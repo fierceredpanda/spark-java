@@ -19,4 +19,5 @@ parquet files directly from java.
 In the package com.intersysconsulting.spark.storageformats.avro there are samples for working with 
 the geneirc and the specific Avro API's.
 
--- AvroReadWriteExample - Writes Generic Avro to a byte buffer and reads it back in.
+- AvroReadWriteExample - Writes Generic Avro to a byte buffer and reads it back in.
+- AvroSpecificReadWriteExample - Uses an Avro generated class to write to the byte buffer and read it back in.

@@ -1,4 +1,5 @@
 {
+    "namespace": "avro.generated",
     "type": "record",
     "name": "Customer",
     "doc": "A customer record.",

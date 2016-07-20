@@ -35,6 +35,16 @@
             <artifactId>avro</artifactId>
             <version>${avro.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro-maven-plugin</artifactId>
+            <version>${avro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro-compiler</artifactId>
+            <version>${avro.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.parquet</groupId>
@@ -67,6 +77,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -80,6 +91,28 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro.version}</version>
+                <executions>
+                    <execution>
+                        <id>schemas</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*.avsc</include>
+                            </includes>
+                            <sourceDirectory>src/main/resources</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

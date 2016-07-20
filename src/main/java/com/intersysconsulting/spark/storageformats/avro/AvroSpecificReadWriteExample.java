@@ -1,24 +1,23 @@
 package com.intersysconsulting.spark.storageformats.avro;
 
+import avro.generated.StringPair;
 import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericData;
-import org.apache.avro.generic.GenericDatumReader;
-import org.apache.avro.generic.GenericDatumWriter;
-import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.*;
+import org.apache.avro.specific.SpecificDatumReader;
+import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 /**
- * An example class that writes Avro to a byte buffer and then reads it using the Generic API for Avro.
+ * Tests reading and writing Avro data from a Byte Output Stream using Specific Avro classes.
  *
  * @author Victor M. Miller
  */
-public class AvroReadWriteExample {
+public class AvroSpecificReadWriteExample {
 
     private Schema schema = null;
 
     public static void main(String[] args) throws Exception {
-        AvroReadWriteExample example = new AvroReadWriteExample();
+        AvroSpecificReadWriteExample example = new AvroSpecificReadWriteExample();
         ByteArrayOutputStream out = example.write();
         example.read(out);
     }
@@ -27,14 +26,12 @@ public class AvroReadWriteExample {
         Schema.Parser parser = new Schema.Parser();
         schema = parser.parse(getClass().getResourceAsStream("/avro/StringPair.avsc"));
 
-        GenericRecord datum = new GenericData.Record(schema);
-        datum.put("left", "L");
-        datum.put("right", "R");
+        StringPair pair = StringPair.newBuilder().setLeft("L").setRight("R").build();
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        DatumWriter<GenericRecord> writer = new GenericDatumWriter<>(schema);
+        DatumWriter<StringPair> writer = new SpecificDatumWriter<>(StringPair.class);
         Encoder encoder = EncoderFactory.get().binaryEncoder(out, null);
-        writer.write(datum, encoder);
+        writer.write(pair, encoder);
         encoder.flush();
         out.close();
 
@@ -42,11 +39,11 @@ public class AvroReadWriteExample {
     }
 
     private void read(ByteArrayOutputStream out) throws Exception {
-        DatumReader<GenericRecord> reader = new GenericDatumReader<>(schema);
+        DatumReader<StringPair> reader = new SpecificDatumReader<>(schema);
         Decoder decoder = DecoderFactory.get().binaryDecoder(out.toByteArray(), null);
 
-        GenericRecord record = reader.read(null, decoder);
-        System.out.println("Left: " + record.get("left").toString());
-        System.out.println("Right: " + record.get("right").toString());
+        StringPair pair = reader.read(null, decoder);
+        System.out.println("Left: " + pair.getLeft());
+        System.out.println("Right: " + pair.getRight());
     }
 }
